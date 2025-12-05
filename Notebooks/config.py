@@ -10,23 +10,9 @@ Cleaned_DATA_DIR = DATA_DIR / 'Cleaned'
 RAW_DATA_DIR = DATA_DIR / 'Raw_Data'
 Results_DIR = DATA_DIR / 'Results'
 
-#Data Output 
-
 OUTPUT_PATH = RAW_DATA_DIR / 'Scraped.csv'
 Cleaned_OUTPUT_PATH = Cleaned_DATA_DIR / 'Cleaned_Scraped.csv'
 Results_OUTPUT_PATH = Results_DIR / 'Classified_Results.csv'
 #Env
 Env = Project_ROOT / '.env'
 
-#Might need this not sure yet
-def load_functions(module,path):
-    import importlib.util
-    spec = importlib.util.spec_from_file_location(module, path)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
-
-# Function to get a function from a module
-def getfunction(mod, function_name: str):
-    func = getattr(mod, function_name)
-    return func
