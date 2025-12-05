@@ -6,14 +6,14 @@ Project_ROOT = Path(__file__).resolve().parents[1]
 
 #Data directories
 DATA_DIR = Project_ROOT / 'Data'
-Cleaned_DATA_DIR = DATA_DIR / 'Cleaned_Data'
+Cleaned_DATA_DIR = DATA_DIR / 'Cleaned'
 RAW_DATA_DIR = DATA_DIR / 'Raw_Data'
 Results_DIR = DATA_DIR / 'Results'
 
 #Data Output 
 
 OUTPUT_PATH = RAW_DATA_DIR / 'Scraped.csv'
-
+Cleaned_OUTPUT_PATH = Cleaned_DATA_DIR / 'Cleaned_Scraped.csv'
 #Env
 Env = Project_ROOT / '.env'
 
