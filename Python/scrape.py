@@ -95,7 +95,7 @@ def main():
     print("Mastodon client ready.")
 
     # Hashtags to scrape
-    hashtags = ["ActuallyAutistic", "Autistic", "AuDHD", "AutisticPride"]
+    hashtags = ["ActuallyAutistic", "Autistic", "AuDHD", "AutisticPride","autismawareness","autismacceptance","asd", "autismspectrum", "autismlife","autismspectrumdisorder", "autismadvocate", "autismjourney", "autismrocks","autismawarenessmonth", "autism", "aspergers", "asc", "autismspectrumcondition"]
     all_posts = []
 
     # Scrape each hashtag
