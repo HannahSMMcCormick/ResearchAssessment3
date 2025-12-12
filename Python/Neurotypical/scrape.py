@@ -30,7 +30,7 @@ def init_mastodon():
     return mastodon
 
 
-def scrape_hashtag(mastodon: Mastodon, hashtag: str, limit: int = 500):
+def scrape_public_timeline(mastodon: Mastodon, limit: int = 500):
 
     # List to store collected posts
     posts = []
@@ -43,8 +43,7 @@ def scrape_hashtag(mastodon: Mastodon, hashtag: str, limit: int = 500):
     # Loop to fetch posts until the limit is reached
     while fetched < limit:
         # Fetch a batch of posts with the specified hashtag
-        batch = mastodon.timeline_hashtag(
-            hashtag,
+        batch = mastodon.timeline_public(
             limit=min(40, limit - fetched),  
             max_id=max_id,
         )
@@ -57,6 +56,8 @@ def scrape_hashtag(mastodon: Mastodon, hashtag: str, limit: int = 500):
             if status.reblog:
                 continue
 
+            if status.language != "en":
+                continue
             
             content_text = status.content 
            
@@ -64,7 +65,6 @@ def scrape_hashtag(mastodon: Mastodon, hashtag: str, limit: int = 500):
             posts.append(
                 {
                     "platform": "mastodon",
-                    "hashtag": hashtag,
                     "status_id": status.id,
                     "created_at": status.created_at.isoformat(),
                     "account_id": status.account.id,
@@ -87,31 +87,20 @@ def scrape_hashtag(mastodon: Mastodon, hashtag: str, limit: int = 500):
 
     return posts
 
-
 def main():
-
-    # Initialize Mastodon client
     mastodon = init_mastodon()
-    print("Mastodon client ready.")
+    print("Scraping public timeline...")
 
-    # Hashtags to scrape
-    hashtags = ["ActuallyAutistic", "Autistic", "AuDHD", "AutisticPride","autismawareness","autismacceptance","asd", "autismspectrum", "autismlife","autismspectrumdisorder", "autismadvocate", "autismjourney", "autismrocks","autismawarenessmonth", "autism", "aspergers", "asc", "autismspectrumcondition"]
-    all_posts = []
-
-    # Scrape each hashtag
-    for tag in hashtags:
-        print(f"Scraping #{tag}...")
-        posts = scrape_hashtag(mastodon, tag, limit=200)  
-        print(f"  -> collected {len(posts)} posts for #{tag}")
-        all_posts.extend(posts)
+    posts = scrape_public_timeline(mastodon, limit=3900)
+    print(f"Collected {len(posts)} public posts.")
 
     # Check if any posts were collected
-    if not all_posts:
+    if not posts:
         print("No posts collected. Check credentials and hashtags.")
         return
 
     # Create DataFrame from collected posts
-    df = pd.DataFrame(all_posts)
+    df = pd.DataFrame(posts)
 
     # Remove duplicate posts based on status_id
     df = df.drop_duplicates(subset=["status_id"])
@@ -121,7 +110,6 @@ def main():
     output_path = OUTPUT_PATH
     df.to_csv(output_path, index=False, encoding="utf-8")
     print(f"Saved {len(df)} posts to {output_path}")
-
 
 if __name__ == "__main__":
     main()
